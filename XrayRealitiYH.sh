@@ -1,51 +1,41 @@
 #!/bin/bash
 
-# نصب وابستگی‌ها
-echo "در حال نصب وابستگی‌ها..."
+echo "Installing dependencies..."
 
-# نصب qrencode (برای تولید QR Code)
 if ! command -v qrencode &> /dev/null
 then
-    echo "qrencode نصب نشده است، در حال نصب..."
     if [ -f /etc/debian_version ]; then
         sudo apt update && sudo apt install qrencode -y
     elif [ -f /etc/redhat-release ]; then
         sudo yum install qrencode -y
     else
-        echo "سیستم شما پشتیبانی نمی‌شود."
         exit 1
     fi
 fi
 
-# نصب Xray
 if ! command -v xray &> /dev/null
 then
-    echo "Xray نصب نشده است، در حال نصب..."
     curl -s -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh | bash
 fi
 
-echo "تمام وابستگی‌ها نصب شدند."
+echo "Dependencies installed."
 
-# تنظیمات دامنه، سرور و UUID
 SERVER="172.86.93.67"
 SERVER_PORT="443"
 UUID="8e90c5bc-ae74-4dee-95ab-48768d356fba"
 REALITY_PUBLIC_KEY="w8lk7x4G1whNuh9rMQlFHbo0YtXaD0JP6eLouLpPCGw"
 REALITY_SHORT_ID="d5b96326a3a42f82"
-TLS_SERVER_NAME="1.1.1.1"  # استفاده از Cloudflare
+TLS_SERVER_NAME="1.1.1.1"
 
-# تنظیمات مسیریابی و DNS
 DNS_SERVERS=("1.1.1.1" "8.8.8.8")
 ROUTE="proxy"
 RULES="geosite-category-ads-all"
 
-# تنظیمات ورودی (TUN)
 INTERFACE_NAME="singbox_tun"
 MTU="9000"
 STRICT_ROUTE=true
 AUTO_ROUTE=true
 
-# ایجاد فایل تنظیمات xray.json
 cat > xray.json << EOF
 {
   "log": {
@@ -157,13 +147,9 @@ cat > xray.json << EOF
 }
 EOF
 
-echo "تنظیمات xray.json ایجاد شد."
+echo "xray.json configuration created."
 
-# نمایش QR Code
 CONFIG_VLESS="vless://$UUID@$SERVER:$SERVER_PORT?encryption=none&security=tls&flow=xtls-rprx-vision&headerType=none&route=proxy#yaahova"
-echo "QR Code Config:"
 echo "$CONFIG_VLESS" | qrencode -t UTF8
 
-# نمایش لینک vless://
-echo "vless:// لینک کانفیگ:"
 echo "$CONFIG_VLESS"
