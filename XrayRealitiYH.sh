@@ -8,9 +8,9 @@ if ! command -v qrencode &> /dev/null
 then
     echo "qrencode نصب نشده است، در حال نصب..."
     if [ -f /etc/debian_version ]; then
-        sudo apt update >/dev/null 2>&1 && sudo apt install qrencode -y >/dev/null 2>&1
+        sudo apt update && sudo apt install qrencode -y
     elif [ -f /etc/redhat-release ]; then
-        sudo yum install qrencode -y >/dev/null 2>&1
+        sudo yum install qrencode -y
     else
         echo "سیستم شما پشتیبانی نمی‌شود."
         exit 1
@@ -21,18 +21,18 @@ fi
 if ! command -v xray &> /dev/null
 then
     echo "Xray نصب نشده است، در حال نصب..."
-    curl -s -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh | bash >/dev/null 2>&1
+    curl -s -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh | bash
 fi
 
 echo "تمام وابستگی‌ها نصب شدند."
 
-# اطلاعات حساس از متغیرهای محیطی
-SERVER="${SERVER}"
-SERVER_PORT="${SERVER_PORT}"
-UUID="${UUID}"
-REALITY_PUBLIC_KEY="${REALITY_PUBLIC_KEY}"
-REALITY_SHORT_ID="${REALITY_SHORT_ID}"
-TLS_SERVER_NAME="${TLS_SERVER_NAME}"
+# تنظیمات دامنه، سرور و UUID
+SERVER="172.86.93.67"
+SERVER_PORT="443"
+UUID="8e90c5bc-ae74-4dee-95ab-48768d356fba"
+REALITY_PUBLIC_KEY="w8lk7x4G1whNuh9rMQlFHbo0YtXaD0JP6eLouLpPCGw"
+REALITY_SHORT_ID="d5b96326a3a42f82"
+TLS_SERVER_NAME="1.1.1.1"  # استفاده از Cloudflare
 
 # تنظیمات مسیریابی و DNS
 DNS_SERVERS=("1.1.1.1" "8.8.8.8")
